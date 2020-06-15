@@ -1,0 +1,163 @@
+- Class: meta
+  Course: Power und Konfidenzintervalle
+  Lesson: Power und Konfidenzintervalle
+  Author: Simon Stuber
+  Type: Standard
+  Organization: Universitaet Koblenz/Landau
+  Version: 2.4.5
+
+- Class: text
+  Output: Heute beschaeftigen wir uns mit Power und Konfidenzintervallen. Zuerst wollen wir uns das Konzept von statistischer Power genauer anschauen. 
+
+- Class: text
+  Output: Wenn man die Groesse eines gesuchten Effekts kennt und weiss wie gross die Stichprobe ist, kann man daraus die Power berechnen, d.h. man kann berechnen wie wahrscheinlich es ist, den gesuchten Effekt in der geplanten Studie aufzudecken. In der letzten Swirl-Lesson haben wir gesehen, dass die Stichprobengroesse dabei entscheidend ist. Nimmt die Stichprobengroesse zu, nimmt auch die Wahrscheinlichkeit zu selbst kleine Effekte aufzudecken. In der Regel werden Studien in der Psychologie so geplant, dass man eine Power von >.80 erhaellt. Damit ist es sehr wahrscheinlich, dass der gesuchte Effekt aufgedeckt wird. Erwartet man besipielsweise einen kleinen Effekt und will eine Power von .80, kann man berechnen wie gross die Stichprobe sein muesste. Nach Ablauf einer Studie kennt man natuerlich die Stichprobengroesse und die groesse des Effekts. Dann kann man im Nachinhein berechnen wie gross die Power in dieser Studie war, d.h. man kann berechnen wie wahrscheinlich es war den gefundenen Effekt aufzudecken.  
+
+
+- Class: cmd_question
+  Output: Um das Konzept von Power besser zu verstehen, schauen wir uns ein Beispiel mit kuenstlich generierten Daten an. Fuehren Sie dazu zuerst den Befehl "set.seed(42)" aus.
+  CorrectAnswer: set.seed(42)
+  AnswerTests: omnitest(correctExpr='set.seed(42)')
+  Hint: Der Befehl lautet "set.seed(42)"
+  
+
+
+- Class: cmd_question
+  Output: Nun koennen wir Daten fuer die erste Gruppe generieren. Fuehren Sie dazu den Befehl "gruppe1 <- rnorm(100, 2, 20)" aus. 
+  CorrectAnswer: gruppe1 <- rnorm(100, 2, 20)
+  AnswerTests: omnitest(correctExpr='gruppe1 <- rnorm(100, 2, 20)')
+  Hint: Der Befehl lautet "gruppe1 <- rnorm(100, 2, 20)"
+
+- Class: cmd_question
+  Output: Nun muessen wir diese beiden Schritte fuer Gruppe 2 wiederholen. Fuehren Sie den Befehl "set.seed(42)" aus um zu garantieren, dass wir alle die gleichen Daten generieren.  
+  CorrectAnswer: set.seed(42)
+  AnswerTests: omnitest(correctExpr='set.seed(42)')
+  Hint: Der Befehl lautet "set.seed(42)"
+
+- Class: cmd_question
+  Output: Nun koennen wir Daten fuer die zweite Gruppe generieren. Fuehren Sie den Befehl "gruppe2 <- rnorm(100, 5, 20)" aus. 
+  CorrectAnswer: gruppe2 <- rnorm(100, 5, 20)
+  AnswerTests: omnitest(correctExpr='gruppe2 <- rnorm(100, 5, 20)')
+  Hint: Der Befehl lautet "gruppe2 <- rnorm(100, 5, 20)"
+  
+
+
+- Class: text
+  Output: Wir haben nun fuer zwei Gruppen kuenstliche Daten generiert. In beiden Gruppen haben wir Daten fuer 100 Personen generiert mit einer Standardabweichung von 20. 
+
+- Class: cmd_question
+  Output: Berechnen Sie nun den Mittelwert in gruppe 1 mit der mean() Funktion. 
+  CorrectAnswer: mean(gruppe1)
+  AnswerTests: omnitest(correctExpr='mean(gruppe1)')
+  Hint: Der Befehl lautet "mean(gruppe1)"
+  
+  
+- Class: cmd_question
+  Output: Berechnen Sie nun den Mittelwert in gruppe 2. 
+  CorrectAnswer: mean(gruppe2)
+  AnswerTests: omnitest(correctExpr='mean(gruppe2)')
+  Hint: Der Befehl lautet "mean(gruppe2)"
+
+- Class: text
+  Output: Wie sie sehen, unterscheiden sich die Mittelwerte deutlich. Aber unterscheiden sie sich auch signifikant? D.h. koennen wir ausschliessen, dass sich die Mittelwerte nur zufaellig unterscheiden?
+
+- Class: cmd_question
+  Output: Fuehren Sie dazu einen t-Test aus mit "t.test(gruppe1, gruppe2)" 
+  CorrectAnswer: t.test(gruppe1, gruppe2)
+  AnswerTests: omnitest(correctExpr='t.test(gruppe1, gruppe2)')
+  Hint: Der Befehl lautet "t.test(gruppe1, gruppe2)"
+
+- Class: text
+  Output: Wie Sie sehen, ist der t-Test nicht signifikant. Der p_wert ist >.05. Obwohl sich die Mittelwerte deutlich unterscheiden, gibt es keinen signifikanten Unterschied zwischen den beiden Gruppen. Das liegt daran, dass wir eine sehr grosse Standardabweichung (SD=20) gewaehlt haben beim Generieren der Daten. D.h. dass der durchschnittliche Abstand zum Mittelwert in beiden Gruppen sehr gross ist. Personen in beiden Gruppen liegen haeufig so weit vom Mittelwert entfernt, dass unklar ist zu welcher der beiden Gruppen ihre Datenpunkte gehoeren. Diese Personen koennten zu jeder der beiden Gruppen gehoeren. Da es in beiden Gruppen sehr viele dieser Personen gibt, kann man die Gruppen nicht deutlich von einander unterscheiden; Sie unterscheiden sich also nicht signifikant. Der Unterschied in den Mittelwerten koennte rein zufaellig sein. 
+
+- Class: cmd_question
+  Output: Berechnen Sie nun die groesse des Effekts mit der cohensD Funktion aus dem "lsr" Paket. 
+  CorrectAnswer: cohensD(gruppe1, gruppe2)
+  AnswerTests: omnitest(correctExpr='cohensD(gruppe1, gruppe2)')
+  Hint: Der Befehl lautet "cohensD(gruppe1, gruppe2)"
+
+- Class: text
+  Output: Die Effektgroesse ist .14. Das ist ein sehr kleiner Effekt. Wir wissen nun also, das der Unterschied zwischen den beiden Gruppen sehr klein und nicht signifikant ist. 
+
+- Class: text
+  Output: Wir wissen allerdings auch, dass wir selbst kleine Effekte aufdecken koennen, wenn wir nur genuegend Versuchspersonen haben. Mit einer Poweranalyse koennen wir nun berechnen, wie gross unsere Stichprobe sein muesste, um diesen Effekt aufzudecken. 
+
+- Class: cmd_question
+  Output: Verwenden Sie hierfuer die pwr.t.test() Funktion aus dem pwr Paket. Tippen sie "pwr.t.test(power = .80, d = 0.14)"
+  CorrectAnswer: pwr.t.test(power = .80, d = 0.14)
+  AnswerTests: omnitest(correctExpr='pwr.t.test(power = .80, d = 0.14)')
+  Hint: Der Befehl lautet "pwr.t.test(power = .80, d = 0.14)"
+
+- Class: text
+  Output: Wir haben nun unsere Effektgroesse von 0.14 angenommen und eine Power von .80. Wenn wir einen so kleinen Effekt mit einer Power von .80 aufdecken wollen, brauchen wir laut unserer Poweranalyse knapp 802 Versuchspersonen pro Gruppe. 
+
+- Class: text
+  Output: Um zu sehen ob 802 VPN tatsaechlich genug sind, koennen wir nun erneut Daten generieren. Alle Parameter bleiben gleich. Wir aendern nur die Stichprobengroesse von 100 zu 802. 
+
+- Class: cmd_question
+  Output: Fueren Sie den Befehl "set.seed(42)" aus. 
+  CorrectAnswer: set.seed(42)
+  AnswerTests: omnitest(correctExpr='set.seed(42)')
+  Hint: Der Befehl lautet "set.seed(42)"
+  
+  
+
+- Class: cmd_question
+  Output: Fuehren Sie nun den Befehl "gruppe1Gross <- rnorm(802, 2, 20)" aus. 
+  CorrectAnswer: gruppe1Gross <- rnorm(802, 2, 20)
+  AnswerTests: omnitest(correctExpr='gruppe1Gross <- rnorm(802, 2, 20)')
+  Hint: Der Befehl lautet "gruppe1Gross <- rnorm(802, 2, 20)"
+  
+  
+  
+- Class: cmd_question
+  Output: Nun wiederholen wir den Prozess fuer Gruppe 2. Fueren Sie den Befehl "set.seed(42)" aus. 
+  CorrectAnswer: set.seed(42)
+  AnswerTests: omnitest(correctExpr='set.seed(42)')
+  Hint: Der Befehl lautet "set.seed(42)"
+  
+  
+
+- Class: cmd_question
+  Output: Fuehren Sie nun den Befehl "gruppe2Gross <- rnorm(802, 5, 20)" aus. 
+  CorrectAnswer: gruppe2Gross <- rnorm(802, 2, 20)
+  AnswerTests: omnitest(correctExpr='gruppe2Gross <- rnorm(802, 5, 20)')
+  Hint: Der Befehl lautet "gruppe2Gross <- rnorm(802, 5, 20)"
+  
+  
+
+- Class: cmd_question
+  Output: Fuehren Sie nun den Befehl "t.test(gruppe1Gross, gruppe2Gross)" aus. 
+  CorrectAnswer: t.test(gruppe1Gross, gruppe2Gross)
+  AnswerTests: omnitest(correctExpr='t.test(gruppe1Gross, gruppe2Gross)')
+  Hint: Der Befehl lautet "t.test(gruppe1Gross, gruppe2Gross)"
+
+- Class: text
+  Output: Wie Sie sehen, ist der t-Test nun signifikant. Mit 802 Personen pro Gruppe, konnten wir den Effekt aufdecken. 
+
+- Class: cmd_question
+  Output: Fuehren Sie nun den Befehl "cohensD(gruppe1Gross, gruppe2Gross)" aus. 
+  CorrectAnswer: cohensD(gruppe1Gross, gruppe2Gross)
+  AnswerTests: omnitest(correctExpr='cohensD(gruppe1Gross, gruppe2Gross)')
+  Hint: Der Befehl lautet "cohensD(gruppe1Gross, gruppe2Gross)"
+
+- Class: text
+  Output: Sie sehen also, dass sich die Groesse unsere Effekts nicht geaendert hat im Vergleich zu unseren kleinen Gruppen mit 100 Personen. Der Effekt bleibt gleich. Nur die groessere Stichrpobengroesse sorgt nun dafuer, dass wir den Effekt aufdecken koennen. 
+
+- Class: text
+  Output: Achtung! Unser Beispiel ist absolut fiktiv und nicht realistisch. Wir haben in unserem Beispiel sehr grosse Standardabweichungen gewaehlt, einen sehr kleinen Effekt und wir haben sehr grosse Gruppen verwenden. Eine solche Situation wird Ihnen in der Praxis wahrscheinlich nie begegnen. Das Besipiel diente nur dazu, zu verdeutlichen, wofuer Poweranalysen gut sind; Sie helfen uns beim Planen einer Studie einzuschaetzen, wie gross unsere Stichprobe sein muss um einen bestimmten Effekt aufzudecken. Beim Planen einer Studie, kennen Sie die exakte Effektgroesse des zu erwartenden Effekts i.d.R. nicht. Um dennoch eine Poweranalyse ausfuerhren zu koennen, orientieren Sie sich an bisherigen Studien in welchen Effektgroessen fuer aehnliche Forschungsfragen berichtet wurden. Mit diesen Effektgroessen, koennen Sie dann eine Poweranalyse berechnen. 
+
+- Class: text
+  Output: Eine weitere Moeglichkeit einen Effekt besser einzuschaetzen sind sog. Konfidenzintervalle. Diese werden beim t-Test automatisch mit angegeben. Wenn wir eine Studie unendlich oft wiederholen wuerden, dann wuerden sich die Ergebnisse immer ein wenig unterscheiden. Mit einem 95% Konfidenzintervall koennen wir berechnen, in welchem Bereich 95% der Werte liegen wuerden, wenn wir die Studie unendlich oft wiederholen wuerden. Bei einem t-Test berechnen wir z.B. den Abstand zweier Mittelwerte. Wuerden wir unsere Studie mehrfach wiederholen, so wuerde der Abstand dieser Mittelwerte immer etwas variieren. Ein 95% gibt nun an, in welchem Bereich 95% der Mittelwertsdifferenzen liegen wuerden, wenn wie die Studie unendlich oft wiederholen wuerden. 
+
+
+- Class: cmd_question
+  Output: Schauen Sie sich noch einmal den t-Test an, welchen wir mit den kleineren Gruppen gerechnet haben. Tippen Sie "t.test(gruppe1, gruppe2)"
+  CorrectAnswer: t.test(gruppe1, gruppe2)
+  AnswerTests: omnitest(correctExpr='t.test(gruppe1, gruppe2)')
+  Hint: Der Befehl lautet "t.test(gruppe1, gruppe2)"
+
+- Class: text
+  Output: Sie sehen, dass das 95% Konfidenzintervall von -8.9 bis 2.9 geht. Das bedeutet, dass, wenn wir die Studie unendlich oft wiederholen wuerden, 95% der Mittelelwertsdifferenzen zwischen -8.9 und 2.9 liegen wuerden. Wie Sie sehen, liegt auch die 0 in diesem Intervall. Das bedeutet, dass es auch moeglich ist, dass die Different der beiden Mittelwerte 0 ist. Daher erhlaten wir ein nicht signifikantes Ergebnis. Liegt die 0 nicht im Konfidenzintervall, dann wissen wir, dass, bei unendlich vielen Wiederholungen, 95% der Mittelwertsdifferenzen von 0 unterschiedlich sind. Dann erhalten wir ein signifikantes Ergebnis. 
+
+- Class: text
+  Output: Das war die heutige Swirl-Lesson. Bis naechste Woche!
